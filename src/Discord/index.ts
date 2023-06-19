@@ -4,10 +4,6 @@ import { Constants } from "./constants";
 import { ChannelInfo, MessageInfo, GuildInfo, UserInfo, Emoji, Role, Sticker, Intents } from "./datatypes";
 import { Event, EventMap } from "./Event";
 
-function isValidEventKey(eventKey: string): eventKey is keyof EventMap {
-     return (eventKey in {} as unknown as EventMap) as unknown as boolean;
-}
-
 export class Message {
 
 }
@@ -276,10 +272,12 @@ export class Discord extends Event<keyof EventMap> {
 
      private handleEvent(eventType: string, eventData: any) {
           eventType = eventType.trim();
-          switch (eventType.trim()) {
+          switch (eventType.trim() as (keyof EventMap)) {
           case "READY":
                this.userInfo = eventData.user;
                this.emit("READY", this);
+               break;
+          case "PRESENCE_UPDATE":
                break;
           case "MESSAGE_CREATE":
                this.emit("MESSAGE_CREATE", eventData);
@@ -305,10 +303,7 @@ export class Discord extends Event<keyof EventMap> {
                };
                const keys = structurify(eventData);
 
-               if (isValidEventKey(eventType))
-                    this.emit(eventType, eventData);
-               else
-                    console.log("unknown ev", eventType, keys);
+               console.log(`unknown event: ${eventType}`, keys);
                break;
           }
      }
