@@ -141,23 +141,25 @@ function App() {
                          </ul>
                     </div>
                ) : (
-                    <div>
+                    <div className="login-form-container">
+<div>
                          {/* Render the login page */}
-                         <h1>Login Page</h1>
+                         <h1 style={{color:" white", opacity:".9"}}>Login Discord</h1>
                          <form onSubmit={handleSubmit}>
+                              <div>
                               <input
                                    type="text"
                                    placeholder="Enter your token..."
                                    value={userToken}
                                    onChange={handleTokenChange}
                               />
-                              <input type="submit" value="Submit" />
-                              <button type="button" onClick={() => setUserToken("")}>
-                                   Clear Token
-                              </button>
+                              <input type="submit" value="Login"/>
+                              </div>
                          </form>
                          {error && <p className="error">{error}</p>}
                     </div>
+                    </div>
+                    
                )}
           </>
      );
