@@ -58,7 +58,7 @@ function App() {
                     setError("");
 
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                    localStorage.setItem("token", token!.trim());
+                    localStorage.setItem("token", token);
 
                     dc.unsubscribe("READY", idReady);
                });
