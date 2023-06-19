@@ -7,7 +7,7 @@ export type PresenceEvent = {
      last_modified: number;
      client_status: { mobile: string };
      broadcast: null;
-     activities: {};
+     activities: object;
 };
 
 export type MessageDelete = {
@@ -22,13 +22,14 @@ export type EventMap = {
      READY: [Discord];
      MESSAGE_DELETE: [MessageDelete];
      PRESENCE_UPDATE: [PresenceEvent];
+     ERROR: [string];
 };
 
 export type EventCallback<T extends keyof EventMap> = (...args: EventMap[T]) => void;
 
 export class Event<T extends keyof EventMap> {
      private events: Map<T, Map<number, EventCallback<T>>> = new Map();
-     private nextId: number = 0;
+     private nextId = 0;
 
      protected emit<K extends T>(event: K, ...args: EventMap[K]): void {
           const callbacks = this.events.get(event);
@@ -43,7 +44,7 @@ export class Event<T extends keyof EventMap> {
           }
 
           const eventId = this.nextId++;
-          this.events.get(event)!.set(eventId, callback);
+          this.events.get(event)?.set(eventId, callback);
           return eventId;
      }
 

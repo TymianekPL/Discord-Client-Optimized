@@ -1,6 +1,5 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { WebSocket } from "ws";
 import { Constants } from "./constants";
 import { ChannelInfo, MessageInfo, GuildInfo, UserInfo, Emoji, Role, Sticker, Intents } from "./datatypes";
 import { Event, EventMap } from "./Event";
@@ -220,6 +219,12 @@ export class Discord extends Event<keyof EventMap> {
           // Close the socket
           this.socket.addEventListener("close", (event) => {
                console.log("Disconnected from the Discord API.", event.code, event.reason);
+
+               if (event.code == 4004) {
+                    this.emit("ERROR", event.reason);
+                    this.socket?.close();
+                    return;
+               }
 
                this.stopHeartbeat();
 
