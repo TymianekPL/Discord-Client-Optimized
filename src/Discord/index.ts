@@ -65,6 +65,22 @@ export class Channel {
           if (response.ok) return (await response.json()) as MessageInfo;
           else throw await response.json();
      }
+
+     async fetchMessages() {
+          const response = await fetch(`${Constants.API_BASE}/channels/${this.id}/messages`, {
+               headers: {
+                    authorization: this._authHeader,
+                    "Content-Type": "application/json"
+               }
+          });
+
+          if (!response.ok) {
+               throw new Error("Failed to fetch messages");
+          }
+
+          const messages = await response.json();
+          return messages;
+     }
 }
 
 export class Guild implements GuildInfo {
@@ -259,12 +275,15 @@ export class Discord extends Event<keyof EventMap> {
      }
 
      private handleEvent(eventType: string, eventData: any) {
-          switch (eventType) {
+          eventType = eventType.trim();
+          switch (eventType.trim()) {
           case "READY":
                this.userInfo = eventData.user;
                this.emit("READY", this);
                break;
-               // Add cases for other event types you want to handle
+          case "MESSAGE_CREATE":
+               this.emit("MESSAGE_CREATE", eventData);
+               break;
           default:
                const structurify = (obj: any): any => {
                     if (obj == null) return null;
@@ -286,10 +305,10 @@ export class Discord extends Event<keyof EventMap> {
                };
                const keys = structurify(eventData);
 
-               if(isValidEventKey(eventType))
+               if (isValidEventKey(eventType))
                     this.emit(eventType, eventData);
                else
-                    console.log(eventType, keys);
+                    console.log("unknown ev", eventType, keys);
                break;
           }
      }

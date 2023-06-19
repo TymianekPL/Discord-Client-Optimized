@@ -1,6 +1,8 @@
-import { useState, useEffect } from "react";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useState, useEffect, useCallback } from "react";
 import "./App.css";
-import Discord from "./Discord";
+import Discord, { Channel } from "./Discord";
+import { MessageInfo } from "./Discord/datatypes";
 
 function App() {
      const [userToken, setUserToken] = useState("");
@@ -8,12 +10,42 @@ function App() {
      const [loading, setLoading] = useState(true);
      const [loggedIn, setLoggedIn] = useState(false);
      const [error, setError] = useState("");
+     const [messages, setMessages] = useState<MessageInfo[]>([]);
+
+     const [currentChannel, setCurrentChannel] = useState<Channel>();
+
+     const _tmp = currentChannel;
 
      const handleTokenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           setUserToken(event.target.value);
      };
 
-     const login = (token?: string) => {
+     const fetchMessages = useCallback(async () => {
+          const messagesInfo = await currentChannel?.fetchMessages();
+          setMessages(messagesInfo || []);
+
+          return messagesInfo || [];
+     }, [messages, currentChannel]);
+
+
+     const messageCreateCb = useCallback(
+          async (message: MessageInfo) => {
+               console.log("_tmp", discord);
+               console.log("_tmp", messages);
+               console.log("grg", currentChannel);
+               console.log(messages);
+               console.log("received", message.channel_id, currentChannel);
+               if (message.channel_id !== currentChannel?.id) return;
+               const newMessages = messages;
+               console.log(newMessages);
+               newMessages.push(message);
+               setMessages(newMessages);
+          },
+          [discord, currentChannel, messages]
+     );
+
+
+     const login = useCallback((token?: string) => {
           setLoading(true);
 
           if(token == null) token = userToken;
@@ -41,12 +73,19 @@ function App() {
 
                     dc.unsubscribe("ERROR", idFail);
                });
+
+               dc.subscribe("MESSAGE_CREATE", messageCreateCb);
+
+               dc.subscribe("MESSAGE_DELETE", message => {
+                    const newMessages = messages.filter(m => m.id != message.id);
+                    setMessages(newMessages);
+               });
           } else {
                setLoading(false);
           }
 
           setUserToken("");
-     };
+     }, [discord, currentChannel, messages]);
 
      useEffect(() => {
           setLoading(false);
@@ -55,7 +94,10 @@ function App() {
                setUserToken(localStorage.getItem("token")?.toString() ?? "");
                login(localStorage.getItem("token")?.toString() ?? "");
           }
-     }, []);
+
+          console.log(currentChannel);
+          console.log(fetchMessages());
+     }, [currentChannel]);
 
      const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
           event.preventDefault(); // Prevent form submission
@@ -73,6 +115,30 @@ function App() {
                     <div>
                          {/* Render the normal page */}
                          <h1>Welcome, {discord?.user.global_name ?? discord?.user.username}</h1>
+
+                         <input
+                              value={currentChannel?.id}
+                              onChange={async (e) => {
+                                   const id = e.target.value;
+                                   const ch = await discord?.fetchChannel(id);
+
+                                   if(ch != null) {
+                                        setCurrentChannel(ch);
+                                        fetchMessages();
+                                   }
+                              }}
+                         />
+
+                         <ul>
+                              <ul>
+                                   {messages && messages.map((message, index) => (
+                                        <div key={index} id={`msg-d-${message.id}`}>
+                                             {/* Render each message */}
+                                             <p>{message.author?.global_name ?? message.author?.username}: {message.content}</p>
+                                        </div>
+                                   ))}
+                              </ul>
+                         </ul>
                     </div>
                ) : (
                     <div>

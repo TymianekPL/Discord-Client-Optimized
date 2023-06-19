@@ -46,6 +46,7 @@ export type MessageInfo = {
      timestamp?: Date;
      edited_timestamp?: Date;
      flags?: number;
+     // eslint-disable-next-line @typescript-eslint/no-explicit-any
      components?: any[];
      referenced_message?: string;
      mention_everyone?: boolean;
