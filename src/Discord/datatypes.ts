@@ -21,7 +21,7 @@ export type UserInfo = {
      avatar: string;
      discriminator: string;
      public_flags: number;
-     avatar_decoration?: any;
+     avatar_decoration?: any; // FIXME: Implement an actual type
      bio: string;
      flags: number;
      locale: string;
@@ -79,7 +79,7 @@ export type ChannelInfo = {
      rate_limit_per_user: string;
      topic?: string;
      position: number;
-     permission_overwrites: any[];
+     permission_overwrites: any[]; // FIXME: Implement an actual type
      nsfw: boolean;
 };
 
