@@ -14,8 +14,6 @@ function App() {
 
      const [currentChannel, setCurrentChannel] = useState<Channel>();
 
-     const _tmp = currentChannel;
-
      const handleTokenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           setUserToken(event.target.value);
      };
@@ -142,24 +140,24 @@ function App() {
                     </div>
                ) : (
                     <div className="login-form-container">
-<div>
-                         {/* Render the login page */}
-                         <h1 style={{color:" white", opacity:".9"}}>Login Discord</h1>
-                         <form onSubmit={handleSubmit}>
-                              <div>
-                              <input
-                                   type="text"
-                                   placeholder="Enter your token..."
-                                   value={userToken}
-                                   onChange={handleTokenChange}
-                              />
-                              <input type="submit" value="Login"/>
-                              </div>
-                         </form>
-                         {error && <p className="error">{error}</p>}
+                         <div>
+                              {/* Render the login page */}
+                              <h1 style={{color:" white", opacity:".9"}}>Login Discord</h1>
+                              <form onSubmit={handleSubmit}>
+                                   <div>
+                                        <input
+                                             type="text"
+                                             placeholder="Enter your token..."
+                                             value={userToken}
+                                             onChange={handleTokenChange}
+                                        />
+                                        <input type="submit" value="Login"/>
+                                   </div>
+                              </form>
+                              {error && <p className="error">{error}</p>}
+                         </div>
                     </div>
-                    </div>
-                    
+
                )}
           </>
      );
