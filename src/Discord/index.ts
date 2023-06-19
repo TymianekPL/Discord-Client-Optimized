@@ -1,6 +1,8 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { WebSocket } from "ws";
 import { Constants } from "./constants";
-import { ChannelInfo, MessageInfo, GuildInfo, UserInfo, Emoji, Role, Sticker, Intents } from './datatypes';
+import { ChannelInfo, MessageInfo, GuildInfo, UserInfo, Emoji, Role, Sticker, Intents } from "./datatypes";
 import { Event, EventMap } from "./Event";
 
 function isValidEventKey(eventKey: string): eventKey is keyof EventMap {
@@ -12,8 +14,8 @@ export class Message {
 }
 
 export class Channel {
-     private _authHeader: string = "";
-     id: string = "";
+     private _authHeader = "";
+     id = "";
      channelInfo: ChannelInfo = null;
 
      private constructor(authHeader: string) {
@@ -67,7 +69,7 @@ export class Channel {
 }
 
 export class Guild implements GuildInfo {
-     private _authHeader: string = "";
+     private _authHeader = "";
      private guildInfo: GuildInfo;
 
      private constructor(authHeader: string) {
@@ -154,10 +156,10 @@ export class Discord extends Event<keyof EventMap> {
      private _token: string;
      private userInfo: UserInfo;
      private bot: boolean;
-     private heartbeatInterval: any;
+     private heartbeatInterval: NodeJS.Timer;
      private sequenceNumber: number;
      socket: WebSocket;
-     private reconnectInterval: number = 5000; // 5 seconds
+     private reconnectInterval = 5000; // 5 seconds
 
      constructor(token: string) {
           super();
@@ -168,7 +170,7 @@ export class Discord extends Event<keyof EventMap> {
      }
 
      private connect() {
-          this.socket = new WebSocket(`wss://gateway.discord.gg/?v=9&encoding=json`);
+          this.socket = new WebSocket("wss://gateway.discord.gg/?v=9&encoding=json");
 
           const p = new Promise(r => {
                // Connection opened
@@ -211,19 +213,19 @@ export class Discord extends Event<keyof EventMap> {
           });
 
           // Handle errors
-          this.socket.addEventListener('error', (error) => {
-               console.error('Socket encountered an error:', error);
+          this.socket.addEventListener("error", (error) => {
+               console.error("Socket encountered an error:", error);
           });
 
           // Close the socket
-          this.socket.addEventListener('close', (event) => {
-               console.log('Disconnected from the Discord API.', event.code, event.reason);
+          this.socket.addEventListener("close", (event) => {
+               console.log("Disconnected from the Discord API.", event.code, event.reason);
 
                this.stopHeartbeat();
 
                if (event.code !== 1000) {
                     // Unexpected close, attempt reconnection
-                    console.log('Reconnecting...');
+                    console.log("Reconnecting...");
                     setTimeout(() => this.connect(), this.reconnectInterval);
                }
           });
@@ -253,37 +255,37 @@ export class Discord extends Event<keyof EventMap> {
 
      private handleEvent(eventType: string, eventData: any) {
           switch (eventType) {
-               case "READY":
-                    this.userInfo = eventData.user;
-                    this.emit("READY", this);
-                    break;
+          case "READY":
+               this.userInfo = eventData.user;
+               this.emit("READY", this);
+               break;
                // Add cases for other event types you want to handle
-               default:
-                    const structurify = (obj: any): any => {
-                         if (obj == null) return null;
+          default:
+               const structurify = (obj: any): any => {
+                    if (obj == null) return null;
 
-                         const keys: any = {};
+                    const keys = {};
 
-                         for (const key of Object.keys(obj)) {
-                              const value = obj[key];
-                              const type = typeof value;
+                    for (const key of Object.keys(obj)) {
+                         const value = obj[key];
+                         const type = typeof value;
 
-                              if (type === "object") {
-                                   keys[key] = structurify(value);
-                              } else {
-                                   keys[key] = value.constructor;
-                              }
+                         if (type === "object") {
+                              keys[key] = structurify(value);
+                         } else {
+                              keys[key] = value.constructor;
                          }
+                    }
 
-                         return keys;
-                    };
-                    let keys = structurify(eventData);
+                    return keys;
+               };
+               const keys = structurify(eventData);
 
-                    if(isValidEventKey(eventType))
-                         this.emit(eventType, eventData);
-                    else
-                         console.log(eventType, keys);
-                    break;
+               if(isValidEventKey(eventType))
+                    this.emit(eventType, eventData);
+               else
+                    console.log(eventType, keys);
+               break;
           }
      }
 
