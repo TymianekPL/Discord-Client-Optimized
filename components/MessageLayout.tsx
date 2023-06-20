@@ -10,17 +10,17 @@ export default function MessageLayout({ messages, currentChannel, currentGuild }
 }) {
      return (
           <div className={styles.layout}>
-               <div style={{display: "flex", justifyContent: "center"}}>
-               <input type="text" onKeyDown={e => {
-                    if(e.keyCode !== 13) return;
-                    currentChannel.send(e.currentTarget.value);
-                    e.currentTarget.value = "";
-               }} className={
-                    styles.sendMessage_input
-               }
-               placeholder={`Message #${currentChannel?.channelInfo.name}`}
+               <div style={{ display: "flex", justifyContent: "center" }}>
+                    <input type="text" onKeyDown={e => {
+                         if (e.keyCode !== 13) return;
+                         currentChannel.send(e.currentTarget.value);
+                         e.currentTarget.value = "";
+                    }} className={
+                         styles.sendMessage_input
+                    }
+                    placeholder={`Message #${currentChannel?.channelInfo.name}`}
 
-               />
+                    />
                </div>
 
                {messages.map((message) => (
