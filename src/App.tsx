@@ -38,9 +38,7 @@ function App() {
           discord?.fetchChannel("1120075838147272775").then(channel => setCurrentChannel(channel));
      }, [discord]);
 
-     useEffect(() => {
-          g_messages = messages;
-     }, [messages]);
+     
 
      useEffect(() => {
           g_currentChannel = currentChannel!;
@@ -78,7 +76,7 @@ function App() {
                if (oldId) dc.unsubscribe("MESSAGE_CREATE", oldId);
 
                oldId = dc.subscribe("MESSAGE_CREATE", (message) => {
-                    console.log("new message");
+                    console.log("new message", message);
                     if (message.channel_id !== g_currentChannel?.id) return;
                     g_setMessages((prevMessages) => [message, ...prevMessages]);
                });
