@@ -80,8 +80,20 @@ export class Channel {
 }
 
 export class Guild implements GuildInfo {
-     fetchMember(id: MemberInfo) {
-          throw new Error("Method not implemented.");
+     async fetchMember(id: string): Promise<MemberInfo> {
+          const response = await fetch(`${Constants.API_BASE}/guilds/${this.id}/member/${id}`, {
+               headers: {
+                    authorization: this._authHeader,
+                    "Content-Type": "application/json"
+               }
+          });
+
+          if (!response.ok) {
+               throw new Error("Failed to fetch channels");
+          }
+
+          const messages = await response.json();
+          return messages as MemberInfo;
      }
      private _authHeader = "";
      private guildInfo: GuildInfo;

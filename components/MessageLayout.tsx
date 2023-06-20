@@ -1,11 +1,12 @@
-import { Channel } from "../src/Discord";
+import { Channel, Guild } from "../src/Discord";
 import { MessageInfo } from "../src/Discord/datatypes";
 import Message from "./Message";
 import styles from "./MessageLayout.module.css";
 
-export default function MessageLayout({ messages, currentChannel }: {
+export default function MessageLayout({ messages, currentChannel, currentGuild }: {
      messages: MessageInfo[],
      currentChannel: Channel;
+     currentGuild: Guild;
 }) {
      return (
           <div className={styles.layout}>
@@ -23,7 +24,7 @@ export default function MessageLayout({ messages, currentChannel }: {
                </div>
 
                {messages.map((message) => (
-                    <Message key={message.id} message={message} />
+                    <Message key={message.id} message={message} guild={currentGuild} />
                ))}
           </div>
      );

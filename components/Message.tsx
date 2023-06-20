@@ -9,8 +9,8 @@ export default function Message({ message, guild }: {
 }) {
      const [roleColour, setRoleColour] = useState<string>();
 
-     guild.fetchMember(message.author?.id).then(member => {
-
+     guild?.fetchMember(message.author!.id).then(member => {
+          console.log(member);
      });
 
      return (
