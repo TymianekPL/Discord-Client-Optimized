@@ -6,4 +6,5 @@
      gap: 10px;
      background-color: #242424;
      width: 64px;
+     overflow: auto;
 }
