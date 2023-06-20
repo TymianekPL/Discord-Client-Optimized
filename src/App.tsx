@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, useCallback } from "react";
 import "./App.css";
-import Discord, { Channel } from "./Discord";
+import Discord, { Channel, Guild } from "./Discord";
 import { GuildInfo, MessageInfo } from "./Discord/datatypes";
 import MessageLayout from "../components/MessageLayout";
 import ServerList from "../components/ServerList";
@@ -19,6 +19,7 @@ function App() {
      const [error, setError] = useState("");
      const [messages, setMessages] = useState<MessageInfo[]>([]);
      const [currentGuild, setCurrentGuild] = useState<GuildInfo>();
+     const [currentGuildObject, setCurrentGuildObject] = useState<Guild>();
 
      g_setMessages = setMessages;
 
@@ -45,6 +46,10 @@ function App() {
      useEffect(() => {
           g_currentChannel = currentChannel!;
      }, [currentChannel]);
+
+     useEffect(() => {
+          discord?.fetchGuild(currentGuild!.id).then(g => setCurrentGuildObject(g));
+     }, [currentGuild]);
 
      const login = useCallback((token?: string) => {
           setLoading(true);
@@ -136,7 +141,7 @@ function App() {
                          <main>
                               <ServerList discord={discord!} setCurrentGuild={setCurrentGuild} />
 
-                              <MessageLayout messages={messages} currentChannel={currentChannel!} />
+                              <MessageLayout messages={messages} currentChannel={currentChannel!} currentGuild={currentGuildObject!} />
                          </main>
                     </>
                ) : (
