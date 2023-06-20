@@ -266,6 +266,27 @@ export class Discord extends Event<keyof EventMap> {
           return p;
      }
 
+     private guildMap: Array<GuildInfo> = [];
+
+     async fetchGuilds() {
+          if (this.guildMap.length > 0) return this.guildMap;
+
+          const response = await fetch(`${Constants.API_BASE}/users/@me/guilds`, {
+               headers: {
+                    authorization: this.authHeader(),
+                    "Content-Type": "application/json"
+               }
+          });
+
+          if (!response.ok) {
+               throw new Error("Failed to fetch guilds");
+          }
+
+          const messages = await response.json();
+          this.guildMap = messages;
+          return messages as GuildInfo[];
+     }
+
      private stopHeartbeat() {
           if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
      }
