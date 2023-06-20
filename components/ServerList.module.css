@@ -4,6 +4,13 @@
      align-items: center;
      justify-content: flex-start;
      gap: 10px;
-     background-color: #242424;
+     background-color: #1a1a1a;
      width: 64px;
+     height: 100%;
+}
+
+.list img {
+     user-select: none;
+     -webkit-user-drag: none;
+     
 }
