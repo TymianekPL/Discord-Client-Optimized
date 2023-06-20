@@ -1,12 +1,11 @@
 import { Tooltip } from "react-tooltip";
 
-export default function ServerIcon({ file, tooltip, callback }: {
+export default function ServerIcon({ file, tooltip }: {
      file: string;
      tooltip: string;
-     callback: () => Promise<void>;
 }) {
      return (
-          <div onClick={callback}>
+          <div>
                <img src={file} alt={tooltip} data-tip={tooltip} />
                <Tooltip >
                     {tooltip}
