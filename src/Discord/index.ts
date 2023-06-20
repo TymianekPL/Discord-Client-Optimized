@@ -302,6 +302,8 @@ export class Discord extends Event<keyof EventMap> {
           return messages as GuildInfo[];
      }
 
+     
+
      private stopHeartbeat() {
           if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
      }

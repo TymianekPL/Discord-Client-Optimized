@@ -20,16 +20,16 @@ function App() {
      const [messages, setMessages] = useState<MessageInfo[]>([]);
      const [currentGuild, setCurrentGuild] = useState<GuildInfo>();
      const [currentGuildObject, setCurrentGuildObject] = useState<Guild>();
-
-     g_setMessages = setMessages;
-
      const [currentChannel, setCurrentChannel] = useState<Channel>();
 
+     g_setMessages = setMessages;
+     
      const handleTokenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           setUserToken(event.target.value);
      };
 
      const fetchMessages = useCallback(async () => {
+          
           const messagesInfo = await currentChannel?.fetchMessages();
           setMessages(messagesInfo || []);
 
@@ -38,8 +38,6 @@ function App() {
      useEffect(() => {
           discord?.fetchChannel("1120075838147272775").then(channel => setCurrentChannel(channel));
      }, [discord]);
-
-     
 
      useEffect(() => {
           g_currentChannel = currentChannel!;
@@ -103,7 +101,7 @@ function App() {
                const channels = await guild.fetchChannels();
 
                const channelObj = await discord.fetchChannel(channels[0].id);
-
+               console.log(channelObj)
                setCurrentChannel(channelObj);
           });
      }, [currentGuild]);

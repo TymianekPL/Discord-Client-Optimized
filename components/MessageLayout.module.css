@@ -11,7 +11,7 @@
 }
 
 .sendMessage_input {
-     width: 90%;
+     width: 80%;
      border: 0;
      outline: none;
      font-size: 18px;
@@ -21,6 +21,8 @@
      background-color: #5f5f5f2d;
      margin-top: 10px;
      color: white;
+     margin-left: auto;
+     margin-right: auto;
 }
 
 ::-webkit-scrollbar {
@@ -39,4 +41,17 @@
 
 ::-webkit-scrollbar-thumb:hover {
      background: #1e1e1fbe;
+}
+
+.inputMessage_container {
+     position: fixed;
+     background-color: rgb(48, 49, 53);
+     width: 100%;
+     z-index: 1000;
+}
+
+.messages_container {
+     display: flex;
+     flex-direction: column-reverse;
+     margin-bottom: 75px;
 }

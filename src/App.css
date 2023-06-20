@@ -86,4 +86,7 @@ main {
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
