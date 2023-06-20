@@ -48,3 +48,9 @@
      transition-delay: 50ms;
      text-decoration: underline;
 }
+
+.attachments embed {
+     max-width: 80%;
+     border-radius: 10px;
+     display: block;
+}
