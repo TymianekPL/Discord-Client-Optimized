@@ -5,8 +5,6 @@ import Discord, { Channel } from "./Discord";
 import { GuildInfo, MessageInfo } from "./Discord/datatypes";
 import MessageLayout from "../components/MessageLayout";
 import ServerList from "../components/ServerList";
-import UseAnimations from "react-useanimations";
-import loading from 'react-useanimations/lib/loading';
 
 let g_messages: MessageInfo[] = [];
 let g_currentChannel: Channel;
@@ -126,14 +124,14 @@ function App() {
      };
 
      if (isLoading) {
-          return <div className="laoding-container"><img src="./public/discord-loading.gif"/></div>
+          return <div className="laoding-container"><img src="./public/discord-loading.gif"/></div>;
      }
 
      return (
           <>
                {loggedIn ? (
                     <>
-                         
+
 
                          <main>
                               <ServerList discord={discord!} setCurrentGuild={setCurrentGuild} />
