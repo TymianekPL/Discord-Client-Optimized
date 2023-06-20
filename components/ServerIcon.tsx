@@ -6,7 +6,7 @@ export default function ServerIcon({ file, tooltip }: {
 }) {
      return (
           <div>
-               <img src={file} alt={tooltip} data-tip={tooltip} />
+               <img src={file} alt={tooltip} style={{borderRadius: "50%", width: "50px"}} data-tip={tooltip} />
                <Tooltip >
                     {tooltip}
                </Tooltip>

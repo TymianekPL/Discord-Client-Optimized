@@ -17,7 +17,7 @@ export default function ServerList({ discord }: {
      return (
           <div className={styles.list}>
                {guilds?.map((guild) => (
-                    <ServerIcon file={(`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp?size=96`)} tooltip={guild.name} key={guild.id} />
+                    <ServerIcon file={(`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.webp?size=96`)} tooltip={guild.name} key={guild.id}/>
                ))}
           </div>
      );
