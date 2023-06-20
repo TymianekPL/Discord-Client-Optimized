@@ -1,0 +1,7 @@
+.layout {
+     display: flex;
+     flex-direction: column-reverse;
+     gap: 0;
+     overflow: scroll;
+     height: 100vh;
+}

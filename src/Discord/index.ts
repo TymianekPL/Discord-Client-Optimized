@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Constants } from "./constants";
+import Constants from "./constants";
 import { ChannelInfo, MessageInfo, GuildInfo, UserInfo, Emoji, Role, Sticker, Intents } from "./datatypes";
 import { Event, EventMap } from "./Event";
 
@@ -161,6 +161,22 @@ export class Guild implements GuildInfo {
      toString() {
           return JSON.stringify(this.toJSON());
      }
+
+     async fetchChannels() {
+          const response = await fetch(`${Constants.API_BASE}/guilds/${this.id}/channels`, {
+               headers: {
+                    authorization: this._authHeader,
+                    "Content-Type": "application/json"
+               }
+          });
+
+          if (!response.ok) {
+               throw new Error("Failed to fetch channels");
+          }
+
+          const messages = await response.json();
+          return messages as ChannelInfo[];
+     }
 }
 
 export class Discord extends Event<keyof EventMap> {
@@ -278,6 +294,10 @@ export class Discord extends Event<keyof EventMap> {
                this.emit("READY", this);
                break;
           case "PRESENCE_UPDATE":
+               this.emit("PRESENCE_UPDATE", eventData);
+               break;
+          case "MESSAGE_DELETE":
+               this.emit("MESSAGE_DELETE", eventData);
                break;
           case "MESSAGE_CREATE":
                this.emit("MESSAGE_CREATE", eventData);
