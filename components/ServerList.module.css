@@ -6,10 +6,28 @@
      gap: 10px;
      background-color: #1a1a1a;
      width: 64px;
+<<<<<<< HEAD
      overflow: auto;
+=======
+     height: 100%;
+     overflow-y: scroll;
+>>>>>>> 217ae33 (Overflow)
 }
 
 .list img {
      user-select: none;
      -webkit-user-drag: none;
+<<<<<<< HEAD
+=======
+     width: 50px;
+     height: 50px;
+     cursor: pointer;
+     transition: 500ms;
+     border-radius: 50%;
+}
+
+.list img:hover {
+     border-radius: 35%;
+
+>>>>>>> 217ae33 (Overflow)
 }

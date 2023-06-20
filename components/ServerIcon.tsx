@@ -13,16 +13,17 @@ export default function ServerIcon({ file, tooltip, fallbackname, setCurrentGuil
           <div onClick={() => {
                setCurrentGuild(id);
           }}>
-               {file != null ? <img src={file} alt={tooltip} data-tip={tooltip} width="60px" height="60px" style={{
-                    borderRadius: "50%"
-               }} /> : <div style={{
+               {file != null ? <img src={file} alt={tooltip} data-tip={tooltip} width="60px" height="60px"  /> : <div style={{
                     borderRadius: "50%",
-                    width: "60px",
-                    height: "60px",
+                    width: "50px",
+                    height: "50px",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    backgroundColor: "#000"
+                    backgroundColor: "#111f",
+                    userSelect: "none",
+                    opacity: ".8",
+                    cursor: "pointer"
                }}>{fallbackname}</div>}
                <Tooltip>
                     {tooltip}
