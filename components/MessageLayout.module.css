@@ -2,7 +2,9 @@
      display: flex;
      flex-direction: column-reverse;
      gap: 0;
-     overflow: scroll;
+     overflow-y: scroll;
      height: 100vh;
      width: 100%;
+     margin-left: 0px;
+     background-color: rgb(48, 49, 53);
 }

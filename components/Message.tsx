@@ -6,6 +6,7 @@ export default function Message({ message }: {
 }) {
      return (
           <div id={`msg-d-${message.id}`} className={styles.message}>
+               <div className={styles.message_container}>
                <div className={styles.header}>
                     {message.author?.global_name ?? message.author?.username}
                     <span className={styles.dot}>{"\u2B24"}</span>
@@ -14,6 +15,8 @@ export default function Message({ message }: {
                <div className={styles.content}>
                     {message.content}
                </div>
+               </div>
+               
           </div>
      );
 }

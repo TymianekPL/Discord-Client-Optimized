@@ -1,10 +1,16 @@
 .message {
      position: relative;
      padding: 10px;
+     margin-left: 15px;
+     transition: 200ms;
+     border-radius: 6px;
+     padding-bottom: 15px;
+     max-width: 1000px;
+     
 }
 
 .message:hover {
-     background-color: #111;
+     background-color: #2b2f35;
 }
 
 .message .dot {
@@ -16,8 +22,6 @@
 }
 
 .message .header {
-     position: absolute;
-     top: 0;
      font-size: 0.75rem;
      left: 0;
 }
@@ -26,3 +30,4 @@
      font-size: 1rem;
      margin-top: 10px;
 }
+

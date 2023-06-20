@@ -5,7 +5,8 @@ import Discord, { Channel } from "./Discord";
 import { GuildInfo, MessageInfo } from "./Discord/datatypes";
 import MessageLayout from "../components/MessageLayout";
 import ServerList from "../components/ServerList";
-
+import UseAnimations from "react-useanimations";
+import loading from 'react-useanimations/lib/loading';
 
 let g_messages: MessageInfo[] = [];
 let g_currentChannel: Channel;
@@ -15,7 +16,7 @@ let oldId = 0;
 function App() {
      const [userToken, setUserToken] = useState("");
      const [discord, setDiscord] = useState<Discord | null>(null);
-     const [loading, setLoading] = useState(true);
+     const [isLoading, setLoading] = useState(true);
      const [loggedIn, setLoggedIn] = useState(false);
      const [error, setError] = useState("");
      const [messages, setMessages] = useState<MessageInfo[]>([]);
@@ -124,8 +125,8 @@ function App() {
           login();
      };
 
-     if (loading) {
-          return <div>Loading...</div>; // Render a loading screen
+     if (isLoading) {
+          return <UseAnimations animation={loading} fillColor="#ff55" wrapperStyle={{color: "white"}} style={{color: "white"}} size={56}></UseAnimations>; // Render a loading screen
      }
 
      return (
