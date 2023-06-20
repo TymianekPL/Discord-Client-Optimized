@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import Discord, { Channel } from "./Discord";
-import { MessageInfo } from "./Discord/datatypes";
+import { GuildInfo, MessageInfo } from "./Discord/datatypes";
 import MessageLayout from "../components/MessageLayout";
 import ServerList from "../components/ServerList";
 
@@ -19,6 +19,7 @@ function App() {
      const [loggedIn, setLoggedIn] = useState(false);
      const [error, setError] = useState("");
      const [messages, setMessages] = useState<MessageInfo[]>([]);
+     const [currentGuild, setCurrentGuild] = useState<GuildInfo>();
 
      g_setMessages = setMessages;
 
@@ -95,6 +96,17 @@ function App() {
      }, []);
 
      useEffect(() => {
+          if(!currentGuild) return;
+          discord?.fetchGuild(currentGuild.id).then(async guild => {
+               const channels = await guild.fetchChannels();
+
+               const channelObj = await discord.fetchChannel(channels[0].id);
+
+               setCurrentChannel(channelObj);
+          });
+     }, [currentGuild]);
+
+     useEffect(() => {
           setLoading(false);
 
           if (localStorage.getItem("token") && !loggedIn) {
@@ -136,7 +148,7 @@ function App() {
                          </div>
 
                          <main>
-                              <ServerList discord={discord!} />
+                              <ServerList discord={discord!} setCurrentGuild={setCurrentGuild} />
 
                               <MessageLayout messages={messages} currentChannel={currentChannel!} />
                          </main>

@@ -1,12 +1,18 @@
 import { Tooltip } from "react-tooltip";
+import { GuildInfo } from "../src/Discord/datatypes";
+import { Dispatch, SetStateAction } from "react";
 
-export default function ServerIcon({ file, tooltip, fallbackname }: {
+export default function ServerIcon({ file, tooltip, fallbackname, setCurrentGuild, id }: {
      file?: string;
      tooltip: string;
      fallbackname?: string;
+     setCurrentGuild: Dispatch<SetStateAction<GuildInfo | undefined>>;
+     id: GuildInfo;
 }) {
      return (
-          <div>
+          <div onClick={() => {
+               setCurrentGuild(id);
+          }}>
                {file != null ? <img src={file} alt={tooltip} data-tip={tooltip} width="60px" height="60px" style={{
                     borderRadius: "50%"
                }} /> : <div style={{
