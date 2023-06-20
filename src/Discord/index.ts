@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Constants from "./constants";
-import { ChannelInfo, MessageInfo, GuildInfo, UserInfo, Emoji, Role, Sticker, Intents } from "./datatypes";
+import { ChannelInfo, MessageInfo, GuildInfo, UserInfo, Emoji, Role, Sticker, Intents, MemberInfo } from "./datatypes";
 import { Event, EventMap } from "./Event";
 
 export class Message {
@@ -80,6 +80,9 @@ export class Channel {
 }
 
 export class Guild implements GuildInfo {
+     fetchMember(id: MemberInfo) {
+          throw new Error("Method not implemented.");
+     }
      private _authHeader = "";
      private guildInfo: GuildInfo;
 

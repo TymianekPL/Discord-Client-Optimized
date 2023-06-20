@@ -192,3 +192,6 @@ export enum Intents {
      AUTO_MODERATION_EXECUTION = 1 << 21
 }
 
+export type MemberInfo = {
+
+};
