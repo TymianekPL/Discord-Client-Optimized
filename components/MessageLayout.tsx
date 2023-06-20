@@ -9,6 +9,7 @@ export default function MessageLayout({ messages, currentChannel }: {
 }) {
      return (
           <div className={styles.layout}>
+<<<<<<< HEAD
                <div style={{ display: "flex", justifyContent: "center" }}>
                     <input type="text" onKeyDown={e => {
                          if (e.keyCode !== 13) return;
@@ -20,6 +21,19 @@ export default function MessageLayout({ messages, currentChannel }: {
                     placeholder={`Message #${currentChannel?.channelInfo.name}`}
 
                     />
+=======
+               <div style={{display: "flex", justifyContent: "center"}}>
+               <input type="text" onKeyDown={e => {
+                    if(e.keyCode !== 13) return;
+                    currentChannel.send(e.currentTarget.value);
+                    e.currentTarget.value = "";
+               }} className={
+                    styles.sendMessage_input
+               }
+               placeholder={`Message #${currentChannel?.channelInfo.name}`}
+               
+               />
+>>>>>>> 7add6b5 (fix channel placeholder)
                </div>
 
                {messages.map((message) => (
