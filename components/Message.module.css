@@ -1,16 +1,18 @@
 .message {
      position: relative;
      padding: 10px;
-     margin-left: 15px;
+     margin-left: 5px;
      transition: 200ms;
-     border-radius: 6px;
+     border-radius: 5px;
      padding-bottom: 15px;
-     max-width: 1000px;
-     
 }
 
 .message:hover {
-     background-color: #2b2f35;
+     background-color: #27292c;
+     transition-delay: 100ms;
+}
+.message_container {
+     margin-left: 10px;
 }
 
 .message .dot {
@@ -24,6 +26,8 @@
 .message .header {
      font-size: 0.75rem;
      left: 0;
+     display: flex;
+     align-items: center;
 }
 
 .message .content {
@@ -31,3 +35,16 @@
      margin-top: 10px;
 }
 
+
+.message_username {
+     font-size: 18px;
+     color: rgb(188, 188, 233);
+     cursor: pointer;
+     margin-right: 5px;
+     transition: 100ms;
+}
+
+.message_username:hover {
+     transition-delay: 50ms;
+     text-decoration: underline;
+}

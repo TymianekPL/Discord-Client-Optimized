@@ -126,27 +126,14 @@ function App() {
      };
 
      if (isLoading) {
-          return <UseAnimations animation={loading} fillColor="#ff55" wrapperStyle={{color: "white"}} style={{color: "white"}} size={56}></UseAnimations>; // Render a loading screen
+          return <div className="laoding-container"><img src="./public/discord-loading.gif"/></div>
      }
 
      return (
           <>
                {loggedIn ? (
                     <>
-                         <div style={{position: "fixed", top: "0"}}>
-                              <input
-                                   value={currentChannel?.id}
-                                   onChange={async (e) => {
-                                        const id = e.target.value;
-                                        const ch = await discord?.fetchChannel(id);
-
-                                        if (ch != null) {
-                                             setCurrentChannel(ch);
-                                             fetchMessages();
-                                        }
-                                   }}
-                              />
-                         </div>
+                         
 
                          <main>
                               <ServerList discord={discord!} setCurrentGuild={setCurrentGuild} />

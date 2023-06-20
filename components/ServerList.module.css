@@ -1,13 +1,14 @@
 .list {
      display: flex;
-     flex-direction: column;
+     flex-direction: column-reverse;
      align-items: center;
      justify-content: flex-start;
      gap: 10px;
-     background-color: #1a1a1a;
+     background-color: #232325;
      width: 80px;
      overflow: auto;
-     height: 100%;
+     height: 100vh;
+     overflow-y: auto;
 }
 
 .list img {
