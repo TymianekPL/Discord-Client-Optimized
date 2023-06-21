@@ -1,0 +1,56 @@
+.message {
+     position: relative;
+     padding: 10px;
+     
+     transition: 200ms;
+     border-radius: 2px;
+     padding-bottom: 15px;
+}
+
+.message:hover {
+     background-color: #27292c;
+     transition-delay: 100ms;
+}
+.message_container {
+     margin-left: 10px;
+}
+
+.message .dot {
+     font-size: 0.2rem;
+     height: 100%;
+     display: inline-block;
+     vertical-align: middle;
+     margin-inline: 2ch;
+}
+
+.message .header {
+     font-size: 0.75rem;
+     left: 0;
+     display: flex;
+     align-items: center;
+}
+
+.message .content {
+     font-size: 1rem;
+     margin-top: 10px;
+}
+
+
+.message_username {
+     font-size: 18px;
+     color: rgb(188, 188, 233);
+     cursor: pointer;
+     margin-right: 5px;
+     transition: 100ms;
+}
+
+.message_username:hover {
+     transition-delay: 50ms;
+     text-decoration: underline;
+}
+
+.attachments embed {
+     max-width: 80%;
+     border-radius: 10px;
+     display: block;
+}

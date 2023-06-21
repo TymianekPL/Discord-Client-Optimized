@@ -1,7 +1,7 @@
 /* eslint-disable no-case-declarations */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Constants } from "./constants";
-import { ChannelInfo, MessageInfo, GuildInfo, UserInfo, Emoji, Role, Sticker, Intents } from "./datatypes";
+import Constants from "./constants";
+import { ChannelInfo, MessageInfo, GuildInfo, UserInfo, Emoji, Role, Sticker, Intents, MemberInfo } from "./datatypes";
 import { Event, EventMap } from "./Event";
 
 export class Message {
@@ -80,6 +80,21 @@ export class Channel {
 }
 
 export class Guild implements GuildInfo {
+     async fetchMember(id: string): Promise<MemberInfo> {
+          const response = await fetch(`${Constants.API_BASE}/guilds/${this.id}/members/${id}`, {
+               headers: {
+                    authorization: this._authHeader,
+                    "Content-Type": "application/json"
+               }
+          });
+
+          if (!response.ok) {
+               throw new Error("Failed to fetch channels");
+          }
+
+          const messages = await response.json();
+          return messages as MemberInfo;
+     }
      private _authHeader = "";
      private guildInfo: GuildInfo;
 
@@ -160,6 +175,22 @@ export class Guild implements GuildInfo {
 
      toString() {
           return JSON.stringify(this.toJSON());
+     }
+
+     async fetchChannels() {
+          const response = await fetch(`${Constants.API_BASE}/guilds/${this.id}/channels`, {
+               headers: {
+                    authorization: this._authHeader,
+                    "Content-Type": "application/json"
+               }
+          });
+
+          if (!response.ok) {
+               throw new Error("Failed to fetch channels");
+          }
+
+          const messages = await response.json();
+          return messages as ChannelInfo[];
      }
 }
 
@@ -250,6 +281,29 @@ export class Discord extends Event<keyof EventMap> {
           return p;
      }
 
+     private guildMap: Array<GuildInfo> = [];
+
+     async fetchGuilds() {
+          if (this.guildMap.length > 0) return this.guildMap;
+
+          const response = await fetch(`${Constants.API_BASE}/users/@me/guilds`, {
+               headers: {
+                    authorization: this.authHeader(),
+                    "Content-Type": "application/json"
+               }
+          });
+
+          if (!response.ok) {
+               throw new Error("Failed to fetch guilds");
+          }
+
+          const messages = await response.json();
+          this.guildMap = messages;
+          return messages as GuildInfo[];
+     }
+
+     
+
      private stopHeartbeat() {
           if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
      }
@@ -278,6 +332,10 @@ export class Discord extends Event<keyof EventMap> {
                this.emit("READY", this);
                break;
           case "PRESENCE_UPDATE":
+               this.emit("PRESENCE_UPDATE", eventData);
+               break;
+          case "MESSAGE_DELETE":
+               this.emit("MESSAGE_DELETE", eventData);
                break;
           case "MESSAGE_CREATE":
                this.emit("MESSAGE_CREATE", eventData);
