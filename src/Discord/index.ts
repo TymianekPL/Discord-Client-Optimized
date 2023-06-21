@@ -81,7 +81,7 @@ export class Channel {
 
 export class Guild implements GuildInfo {
      async fetchMember(id: string): Promise<MemberInfo> {
-          const response = await fetch(`${Constants.API_BASE}/guilds/${this.id}/member/${id}`, {
+          const response = await fetch(`${Constants.API_BASE}/guilds/${this.id}/members/${id}`, {
                headers: {
                     authorization: this._authHeader,
                     "Content-Type": "application/json"

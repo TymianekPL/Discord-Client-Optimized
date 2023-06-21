@@ -9,6 +9,7 @@
      overflow: auto;
      height: 100vh;
      overflow-y: auto;
+     padding-top: 20px;
 }
 
 .list img {

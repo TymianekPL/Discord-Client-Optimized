@@ -31,6 +31,13 @@ export default function Message({ message, guild }: {
                     <div className={styles.content}>
                          {message.content}
                     </div>
+                    <div className={styles.attachments}>
+                         {message.attachments.map(attachment => (
+                              <div key={attachment.id}>
+                                   <embed src={attachment.proxy_url} type={attachment.content_type} />
+                              </div>
+                         ))}
+                    </div>
                </div>
 
           </div>

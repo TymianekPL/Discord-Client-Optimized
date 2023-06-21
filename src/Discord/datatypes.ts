@@ -35,6 +35,21 @@ export type UserInfo = {
      phone: string;
 };
 
+export type Attachment = {
+     id: string;
+     filename: string;
+     description?: string;
+     content_type?: string;
+     size: number;
+     url: string;
+     proxy_url: string;
+     height?: number;
+     width?: number;
+     ephemeral?: boolean;
+     duration_secs?: number;
+     waveform?: string;
+};
+
 export type MessageInfo = {
      id?: string;
      type?: number;
@@ -51,6 +66,7 @@ export type MessageInfo = {
      referenced_message?: string;
      mention_everyone?: boolean;
      pinned?: boolean;
+     attachments: Attachment[];
 };
 
 export enum ChannelType {
