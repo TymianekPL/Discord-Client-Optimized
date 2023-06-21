@@ -1,9 +1,9 @@
 .message {
      position: relative;
      padding: 10px;
-     margin-left: 5px;
+     
      transition: 200ms;
-     border-radius: 5px;
+     border-radius: 2px;
      padding-bottom: 15px;
 }
 

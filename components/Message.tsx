@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageInfo } from "../src/Discord/datatypes";
 import styles from "./Message.module.css";
 import { Guild } from "../src/Discord";
@@ -12,6 +12,7 @@ export default function Message({ message, guild }: {
      guild?.fetchMember(message.author!.id).then(member => {
           console.log(member);
      });
+     
 
      return (
           <div id={`msg-d-${message.id}`} className={styles.message}>
