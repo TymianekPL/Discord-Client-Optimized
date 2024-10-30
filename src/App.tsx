@@ -1,52 +1,56 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useState, useEffect, useCallback } from "react";
 import "./App.css";
-import Discord, { Channel } from "./Discord";
-import { MessageInfo } from "./Discord/datatypes";
+import Discord, { Channel, Guild } from "./Discord";
+import { GuildInfo, MessageInfo } from "./Discord/datatypes";
+import MessageLayout from "../components/MessageLayout";
+import ServerList from "../components/ServerList";
+
+let g_messages: MessageInfo[] = [];
+let g_currentChannel: Channel;
+let g_setMessages: React.Dispatch<React.SetStateAction<MessageInfo[]>>;
+let oldId = 0;
 
 function App() {
      const [userToken, setUserToken] = useState("");
      const [discord, setDiscord] = useState<Discord | null>(null);
-     const [loading, setLoading] = useState(true);
+     const [isLoading, setLoading] = useState(true);
      const [loggedIn, setLoggedIn] = useState(false);
      const [error, setError] = useState("");
      const [messages, setMessages] = useState<MessageInfo[]>([]);
-
+     const [currentGuild, setCurrentGuild] = useState<GuildInfo>();
+     const [currentGuildObject, setCurrentGuildObject] = useState<Guild>();
      const [currentChannel, setCurrentChannel] = useState<Channel>();
 
+     g_setMessages = setMessages;
+     
      const handleTokenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           setUserToken(event.target.value);
      };
 
      const fetchMessages = useCallback(async () => {
+          
           const messagesInfo = await currentChannel?.fetchMessages();
           setMessages(messagesInfo || []);
 
           return messagesInfo || [];
-     }, [messages, currentChannel]);
+     }, [currentChannel]);
+     useEffect(() => {
+          discord?.fetchChannel("1120075838147272775").then(channel => setCurrentChannel(channel));
+     }, [discord]);
 
+     useEffect(() => {
+          g_currentChannel = currentChannel!;
+     }, [currentChannel]);
 
-     const messageCreateCb = useCallback(
-          async (message: MessageInfo) => {
-               console.log("_tmp", discord);
-               console.log("_tmp", messages);
-               console.log("grg", currentChannel);
-               console.log(messages);
-               console.log("received", message.channel_id, currentChannel);
-               if (message.channel_id !== currentChannel?.id) return;
-               const newMessages = messages;
-               console.log(newMessages);
-               newMessages.push(message);
-               setMessages(newMessages);
-          },
-          [discord, currentChannel, messages]
-     );
-
+     useEffect(() => {
+          discord?.fetchGuild(currentGuild!.id).then(g => setCurrentGuildObject(g));
+     }, [currentGuild]);
 
      const login = useCallback((token?: string) => {
           setLoading(true);
 
-          if(token == null) token = userToken;
+          if (token == null) token = userToken;
 
           if (token) {
                const dc = new Discord(token);
@@ -57,7 +61,6 @@ function App() {
                     setLoading(false);
                     setError("");
 
-                    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     localStorage.setItem("token", token!.trim());
 
                     dc.unsubscribe("READY", idReady);
@@ -72,18 +75,36 @@ function App() {
                     dc.unsubscribe("ERROR", idFail);
                });
 
-               dc.subscribe("MESSAGE_CREATE", messageCreateCb);
+
+               if (oldId) dc.unsubscribe("MESSAGE_CREATE", oldId);
+
+               oldId = dc.subscribe("MESSAGE_CREATE", (message) => {
+                    console.log("new message", message);
+                    if (message.channel_id !== g_currentChannel?.id) return;
+                    g_setMessages((prevMessages) => [message, ...prevMessages]);
+               });
 
                dc.subscribe("MESSAGE_DELETE", message => {
-                    const newMessages = messages.filter(m => m.id != message.id);
-                    setMessages(newMessages);
+                    const newMessages = g_messages.filter(m => m.id != message.id);
+                    g_setMessages(newMessages);
                });
           } else {
                setLoading(false);
           }
 
           setUserToken("");
-     }, [discord, currentChannel, messages]);
+     }, []);
+
+     useEffect(() => {
+          if(!currentGuild) return;
+          discord?.fetchGuild(currentGuild.id).then(async guild => {
+               const channels = await guild.fetchChannels();
+
+               const channelObj = await discord.fetchChannel(channels[0].id);
+               console.log(channelObj)
+               setCurrentChannel(channelObj);
+          });
+     }, [currentGuild]);
 
      useEffect(() => {
           setLoading(false);
@@ -103,46 +124,27 @@ function App() {
           login();
      };
 
-     if (loading) {
-          return <div>Loading...</div>; // Render a loading screen
+     if (isLoading) {
+          return <div className="laoding-container"><img src="./public/discord-loading.gif"/></div>;
      }
 
      return (
           <>
                {loggedIn ? (
-                    <div>
-                         {/* Render the normal page */}
-                         <h1>Welcome, {discord?.user.global_name ?? discord?.user.username}</h1>
+                    <>
 
-                         <input
-                              value={currentChannel?.id}
-                              onChange={async (e) => {
-                                   const id = e.target.value;
-                                   const ch = await discord?.fetchChannel(id);
 
-                                   if(ch != null) {
-                                        setCurrentChannel(ch);
-                                        fetchMessages();
-                                   }
-                              }}
-                         />
+                         <main>
+                              <ServerList discord={discord!} setCurrentGuild={setCurrentGuild} />
 
-                         <ul>
-                              <ul>
-                                   {messages && messages.map((message, index) => (
-                                        <div key={index} id={`msg-d-${message.id}`}>
-                                             {/* Render each message */}
-                                             <p>{message.author?.global_name ?? message.author?.username}: {message.content}</p>
-                                        </div>
-                                   ))}
-                              </ul>
-                         </ul>
-                    </div>
+                              <MessageLayout messages={messages} currentChannel={currentChannel!} currentGuild={currentGuildObject!} />
+                         </main>
+                    </>
                ) : (
                     <div className="login-form-container">
                          <div>
                               {/* Render the login page */}
-                              <h1 style={{color:" white", opacity:".9"}}>Login Discord</h1>
+                              <h1 style={{ color: " white", opacity: ".9" }}>Login Discord</h1>
                               <form onSubmit={handleSubmit}>
                                    <div>
                                         <input
@@ -151,7 +153,7 @@ function App() {
                                              value={userToken}
                                              onChange={handleTokenChange}
                                         />
-                                        <input type="submit" value="Login"/>
+                                        <input type="submit" value="Login" />
                                    </div>
                               </form>
                               {error && <p className="error">{error}</p>}
